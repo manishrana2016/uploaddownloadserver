@@ -1,0 +1,56 @@
+<!DOCTYPE html>
+<HTML>
+    <Head>
+        <H2>Download Files</H2>
+        <HR>
+        <TITLE>Download Files</TITLE>
+        <SCRIPT>
+            function getFileList(){
+                var xmlhttp = new XMLHttpRequest();
+                xmlhttp.onreadystatechange = function(){
+                    if(this.readyState == 4 && this.status == 200){
+                        var fileInfoJSONObj = JSON.parse(this.responseText);
+                        console.log(fileInfoJSONObj);
+                        var tableBody = document.getElementById("fileInfoTable").getElementsByTagName('tbody')[0];
+                        fileInfoJSONObj.forEach(function(fileInfo,index){
+                            var dynamicRow = tableBody.insertRow();
+                            var serialNumber = dynamicRow.insertCell(0);
+                            var fileName = dynamicRow.insertCell(1);
+                            var fileSize = dynamicRow.insertCell(2);
+                            serialNumber.innerHTML = index+1;
+                            fileName.innerHTML = fileInfo.fileName;
+                            fileSize.innerHTML = fileInfo.fileSize;
+                        });
+                    }
+                }
+                xmlhttp.open("GET","getDownloadFilesList",true);
+                xmlhttp.send();
+            }
+        </SCRIPT>
+    </Head>
+    <BODY onload="getFileList()">
+        <a href="home">
+            Home
+        </a>
+        <BR>
+        <a href="upload">
+           Upload Files
+        </a>
+        <BR><BR><BR><BR>
+        <H3> File List</H3>
+        <BR>
+        
+        <Table id="fileInfoTable" border="1">
+            <thead>
+                <TH>S#</TH>
+                <TH>File Name</TH>
+                <TH>Size (Bytes)</TH>
+            </thead>
+            <tbody>
+                
+            </tbody>
+            <tfoot></tfoot>
+        </Table>
+
+    </BODY>
+</HTML>

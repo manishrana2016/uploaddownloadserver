@@ -1,0 +1,63 @@
+<!DOCTYPE html>
+<HTML>
+    <Head>
+        <H2>Upload Files</H2>
+        <HR>
+        <TITLE>Upload Files</TITLE>
+        <SCRIPT>
+            function uploadMyFile(){
+                var xmlhttp = new XMLHttpRequest();
+                var uploadFileForm = document.getElementById("uploadFileForm");
+                var myFormData = new FormData(uploadFileForm);
+                var myFilesInput = document.getElementById("uploadFile");
+                var myFiles = myFilesInput.files;
+                myFormData.append('uploadFile',myFiles);
+                xmlhttp.upload.addEventListener("progress", progressHandler, false);
+                xmlhttp.addEventListener("error", errorHandler, false);
+                xmlhttp.addEventListener("abort", abortHandler, false);
+                resetFileInputElement();
+                xmlhttp.open("POST","uploadFile",true);
+                xmlhttp.send(myFormData);
+            }
+            function resetFileInputElement(){
+                document.getElementById("uploadFile").value = "";
+            }
+            function progressHandler(event) {
+                var percent = (event.loaded / event.total) * 100;
+                document.getElementById("uploadProgressBar").value = Math.round(percent);
+                document.getElementById("fileSubmitStatus").innerHTML = Math.round(percent) + "% uploaded";
+            }
+
+            function completeHandler(event) {
+                document.getElementById("fileSubmitStatus").innerHTML = xmlhttp.responseText;
+                document.getElementById("uploadProgressBar").value = 0;
+                resetFileInputElement();
+            }
+
+            function errorHandler(event) {
+                document.getElementById("fileSubmitStatus").innerHTML = "Upload Failed";
+            }
+
+            function abortHandler(event) {
+                document.getElementById("fileSubmitStatus").innerHTML = "Upload Aborted";
+            }
+        </SCRIPT>
+    </Head>
+    <BODY>
+        <a href="home">
+            Home
+        </a>
+        <BR>
+        <a href="download">
+            Download Files
+        </a>
+        <BR><BR><BR><BR>
+        <FORM id="uploadFileForm">
+            File:&nbsp;<input type="file" name="uploadFile" id="uploadFile" multiple>
+            <input type="button" value="Upload" onclick="uploadMyFile()">
+
+        </FORM>
+        <progress id="uploadProgressBar" value="0" max="100" style="width:300px;"></progress>
+        <div id="fileSubmitStatus"></div>
+    </BODY>
+</HTML>
